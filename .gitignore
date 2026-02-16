@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.next/
+.vscode/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.DS_Store
+
+# Build outputs
+dist/
+out/
+.next/
+build/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Misc
+*.tgz
+
+# Claude配置
+.claude/
