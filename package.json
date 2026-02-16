@@ -1,0 +1,48 @@
+{
+  "name": "guizhang",
+  "version": "1.0.0",
+  "description": "归藏",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muliminty/Guizhang.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Muliminty/Guizhang/issues"
+  },
+  "homepage": "https://github.com/Muliminty/Guizhang#readme",
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "dexie": "^4.3.0",
+    "fuse.js": "^7.1.0",
+    "jsdom": "^28.1.0",
+    "lucide-react": "^0.564.0",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.4.1",
+    "turndown": "^7.2.2",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^27.0.0",
+    "@types/turndown": "^5.0.6",
+    "autoprefixer": "^10.4.24",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
+  }
+}
