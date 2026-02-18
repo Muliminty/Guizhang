@@ -1,0 +1,81 @@
+# 依赖目录
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# 构建输出
+.next/
+.next-build/
+.next-standalone/
+
+# 缓存
+.cache/
+.turbo/
+
+# 日志文件
+*.log
+logs/
+
+# 覆盖率目录
+coverage/
+.nyc_output/
+
+# 依赖锁定文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 测试快照
+__snapshots__/
+
+# IDE配置
+.vscode/
+.idea/
+
+# 二进制文件
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+*.pdf
+*.zip
+*.gz
+*.tar
+
+# 字体文件
+*.ttf
+*.otf
+*.woff
+*.woff2
+
+# 视频和音频
+*.mp4
+*.mp3
+*.wav
+*.ogg
+
+# 文档文件
+*.md
+*.mdx
+
+# 环境变量
+.env*
+!.env.example
+
+# 临时文件
+tmp/
+temp/
+
+# 项目特定忽略
+经验/每日日志/
+经验/任务跟踪.md
+经验/README.md
