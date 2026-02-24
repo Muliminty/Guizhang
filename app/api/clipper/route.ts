@@ -5,8 +5,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { ApiResponse, ClipperResult, ClipperOptions, EnhancedArticle, PlatformDetectionResult } from '../../../types'
-import { platformDetector } from '../../../lib/platform-detector'
+import { ApiResponse, ClipperResult, ClipperOptions, EnhancedArticle, PlatformDetectionResult } from '@/types'
+import { platformDetector } from '@/lib/platform-detector'
+import { defaultClipper, ClipperServiceResult } from '@/lib/clipper'
 
 /**
  * 增强剪藏请求体
@@ -214,9 +215,6 @@ async function handleClip(
   platformDetection: PlatformDetectionResult,
   metadata?: EnhancedClipRequest['metadata']
 ): Promise<ClipperResult> {
-  // TODO: 实现实际的剪藏逻辑
-  // 这里应该调用现有的剪藏服务
-
   console.log('执行剪藏:', {
     url,
     options,
@@ -225,66 +223,66 @@ async function handleClip(
     metadata
   })
 
-  // 模拟剪藏结果
-  const article: EnhancedArticle = {
-    id: generateId(),
-    title: metadata?.title || platformDetection.metadata?.title || '未命名文章',
-    content: '这是剪藏的内容...',
-    url,
-    domain: extractDomain(url),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    isStarred: false,
-    isArchived: false,
-    platform: platformDetection.platform,
-    contentType: platformDetection.contentType,
-    processingStrategy: 'clip'
-  }
+  try {
+    // 使用剪藏服务执行实际抓取和提取
+    const clipperResult = await defaultClipper.clip(url, {
+      title: metadata?.title,
+      tags: metadata?.tags,
+      notes: metadata?.notes
+    } as {
+      title?: string
+      tags?: string[]
+      notes?: string
+    })
 
-  // 可选字段
-  if (platformDetection.metadata?.author) {
-    article.author = platformDetection.metadata.author
-  }
+    const article = clipperResult.article
 
-  if (platformDetection.metadata?.publishedAt) {
-    article.publishedAt = platformDetection.metadata.publishedAt
-  } else {
-    article.publishedAt = new Date().toISOString()
-  }
+    // 如果平台检测提供了额外的元数据，补充到文章中
+    if (platformDetection.metadata) {
+      // 合并平台元数据
+      article.platformMetadata = {
+        ...article.platformMetadata,
+        ...platformDetection.metadata,
+        rawData: {
+          ...(article.platformMetadata?.rawData as any),
+          platformDetection: platformDetection.metadata
+        }
+      }
 
-  if (platformDetection.metadata?.duration) {
-    article.readingTime = Math.ceil(platformDetection.metadata.duration / 60)
-  } else {
-    article.readingTime = 5
-  }
+      // 补充缺失的字段
+      if (!article.author && platformDetection.metadata.author) {
+        article.author = platformDetection.metadata.author
+      }
 
-  article.wordCount = 1000
+      if (!article.publishedAt && platformDetection.metadata.publishedAt) {
+        article.publishedAt = platformDetection.metadata.publishedAt
+      }
 
-  if (platformDetection.metadata?.description) {
-    article.excerpt = platformDetection.metadata.description
-  } else {
-    article.excerpt = '文章摘要...'
-  }
+      if (!article.coverImage && platformDetection.metadata.thumbnail) {
+        article.coverImage = platformDetection.metadata.thumbnail
+      }
 
-  if (platformDetection.metadata?.thumbnail) {
-    article.coverImage = platformDetection.metadata.thumbnail
-  }
+      if (!article.excerpt && platformDetection.metadata.description) {
+        article.excerpt = platformDetection.metadata.description
+      }
+    }
 
-  if (platformDetection.metadata) {
-    article.platformMetadata = platformDetection.metadata
-  }
+    // 更新处理策略
+    article.processingStrategy = 'clip'
 
-  return {
-    success: true,
-    data: article,
-    metadata: {
+    // 添加剪藏过程的元数据
+    const clipperMetadata = {
       title: article.title,
       author: article.author,
       publishedAt: article.publishedAt,
       readingTime: article.readingTime,
       wordCount: article.wordCount,
       excerpt: article.excerpt,
-      coverImage: article.coverImage
+      coverImage: article.coverImage,
+      qualityScore: article.qualityScore,
+      fetchTime: clipperResult.fetchResult.fetchTime,
+      extractTime: clipperResult.extractResult.extractTime,
+      totalTime: clipperResult.totalTime
     } as {
       title: string
       author?: string
@@ -293,6 +291,56 @@ async function handleClip(
       wordCount?: number
       excerpt?: string
       coverImage?: string
+      qualityScore?: number
+      fetchTime: number
+      extractTime: number
+      totalTime: number
+    }
+
+    return {
+      success: true,
+      data: article,
+      metadata: clipperMetadata
+    }
+
+  } catch (error) {
+    console.error('剪藏失败:', error)
+
+    // 降级处理：返回基础信息
+    const fallbackArticle: EnhancedArticle = {
+      id: generateId(),
+      title: metadata?.title || platformDetection.metadata?.title || '剪藏失败的文章',
+      content: '剪藏过程中出现错误，无法获取文章内容。',
+      url,
+      domain: extractDomain(url),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isStarred: false,
+      isArchived: false,
+      platform: platformDetection.platform,
+      contentType: platformDetection.contentType,
+      processingStrategy: 'clip',
+      publishedAt: new Date().toISOString(),
+      readingTime: 1,
+      wordCount: 50,
+      excerpt: '剪藏过程中出现错误。',
+      qualityScore: 0.1
+    }
+
+    // 添加错误信息
+    if (platformDetection.metadata) {
+      fallbackArticle.platformMetadata = platformDetection.metadata
+    }
+
+    return {
+      success: false,
+      data: fallbackArticle,
+      metadata: {
+        title: fallbackArticle.title,
+        error: error instanceof Error ? error.message : '剪藏失败',
+        fallback: true
+      } as any,
+      error: error instanceof Error ? error.message : '剪藏失败'
     }
   }
 }
@@ -366,7 +414,36 @@ async function handleBookmark(
 function isValidUrl(url: string): boolean {
   try {
     const urlObj = new URL(url)
-    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:'
+
+    // 只允许HTTP/HTTPS协议
+    if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+      return false
+    }
+
+    // 检查是否为本地地址或私有地址
+    const hostname = urlObj.hostname.toLowerCase()
+    if (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      hostname.endsWith('.local') ||
+      hostname.endsWith('.internal') ||
+      hostname === '[::1]'
+    ) {
+      return false
+    }
+
+    // 检查私有IP地址
+    if (/^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.)/.test(hostname)) {
+      return false
+    }
+
+    // 基本长度检查
+    if (url.length > 2048) {
+      return false
+    }
+
+    return true
   } catch {
     return false
   }

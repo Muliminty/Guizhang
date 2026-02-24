@@ -316,6 +316,10 @@ export interface PlatformMetadata {
   language?: string        // 内容语言
   isLive?: boolean         // 是否直播
   isPremium?: boolean      // 是否付费内容
+  wordCount?: number       // 字数统计
+  readingTime?: number     // 阅读时间（分钟）
+  hasImages?: boolean      // 是否包含图片
+  hasVideos?: boolean      // 是否包含视频
   rawData?: Record<string, any> // 原始元数据
 }
 
@@ -343,6 +347,10 @@ export interface EnhancedArticle extends Article {
   contentType?: ContentType        // 内容类型
   platformMetadata?: PlatformMetadata // 平台元数据
   processingStrategy?: ProcessingStrategy // 处理策略
+  qualityScore?: number            // 提取质量评分 0-1
+  tags?: string[]                  // 标签数组
+  notes?: string                   // 用户笔记
+  language?: string                // 内容语言
 }
 
 /**

@@ -166,8 +166,8 @@ export class ContentTypeClassifier {
       },
       {
         test: (_, meta) =>
-          meta.title?.toLowerCase().includes('video') ||
-          meta.title?.toLowerCase().includes('watch'),
+          (meta.title?.toLowerCase().includes('video') ?? false) ||
+          (meta.title?.toLowerCase().includes('watch') ?? false),
         contentType: 'video',
         confidence: 0.7
       },
@@ -181,9 +181,9 @@ export class ContentTypeClassifier {
       },
       {
         test: (_, meta) =>
-          meta.title?.toLowerCase().includes('blog') ||
-          meta.title?.toLowerCase().includes('article') ||
-          meta.title?.toLowerCase().includes('post'),
+          (meta.title?.toLowerCase().includes('blog') ?? false) ||
+          (meta.title?.toLowerCase().includes('article') ?? false) ||
+          (meta.title?.toLowerCase().includes('post') ?? false),
         contentType: 'article',
         confidence: 0.7
       },
@@ -191,16 +191,16 @@ export class ContentTypeClassifier {
       // 代码相关启发式
       {
         test: (_, meta) =>
-          meta.title?.toLowerCase().includes('github') ||
-          meta.title?.toLowerCase().includes('repo') ||
-          meta.title?.toLowerCase().includes('code'),
+          (meta.title?.toLowerCase().includes('github') ?? false) ||
+          (meta.title?.toLowerCase().includes('repo') ?? false) ||
+          (meta.title?.toLowerCase().includes('code') ?? false),
         contentType: 'code_repository',
         confidence: 0.8
       },
       {
         test: (_, meta) =>
-          meta.description?.toLowerCase().includes('api') ||
-          meta.description?.toLowerCase().includes('documentation'),
+          (meta.description?.toLowerCase().includes('api') ?? false) ||
+          (meta.description?.toLowerCase().includes('documentation') ?? false),
         contentType: 'documentation',
         confidence: 0.7
       },
