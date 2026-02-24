@@ -238,7 +238,7 @@ import { detectPlatform } from '../../lib/platform-detector'
 3. `docs/IMPLEMENTATION-SUMMARY.md` - 实现总结和下一步计划
 
 ### 开发记录
-- `经验/` 目录包含开发经验记录
+- `docs/IMPLEMENTATION-SUMMARY.md` - 包含开发经验记录（EXP-001至EXP-005）
 - `docs/PROGRESS.md` 跟踪开发进度
 - `docs/TASKS.md` 管理开发任务
 

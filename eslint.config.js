@@ -34,9 +34,6 @@ export default [
       '*.swo',
       'tmp/**',
       'temp/**',
-      '经验/每日日志/**',
-      '经验/任务跟踪.md',
-      '经验/README.md',
     ],
   },
 

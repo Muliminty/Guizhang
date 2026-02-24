@@ -1,0 +1,298 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-24T00:00:00.000Z",
+  "rules": [
+    {
+      "platform": "youtube",
+      "patterns": [
+        "^https://(?:www\\.)?youtube\\.com/watch\\?v=[\\w-]{11}",
+        "^https://youtu\\.be/[\\w-]{11}",
+        "^https://(?:www\\.)?youtube\\.com/shorts/[\\w-]+",
+        "^https://(?:www\\.)?youtube\\.com/playlist\\?list=[\\w-]+",
+        "^https://(?:www\\.)?youtube\\.com/(?:c/|channel/|user/|@)[\\w-]+"
+      ],
+      "contentType": "video",
+      "metadataExtractor": "youtube",
+      "priority": 100,
+      "enabled": true,
+      "description": "YouTube视频检测规则",
+      "extractors": {
+        "videoId": [
+          "youtube\\.com/watch\\?v=([\\w-]{11})",
+          "youtu\\.be/([\\w-]{11})",
+          "youtube\\.com/shorts/([\\w-]+)"
+        ]
+      }
+    },
+    {
+      "platform": "bilibili",
+      "patterns": [
+        "^https://www\\.bilibili\\.com/video/BV[\\w]{10}",
+        "^https://www\\.bilibili\\.com/video/av\\d+",
+        "^https://www\\.bilibili\\.com/bangumi/play/(?:ss\\d+|ep\\d+)",
+        "^https://www\\.bilibili\\.com/read/cv\\d+",
+        "^https://live\\.bilibili\\.com/\\d+",
+        "^https://space\\.bilibili\\.com/\\d+",
+        "^https://b23\\.tv/[\\w]+"
+      ],
+      "contentType": "video",
+      "metadataExtractor": "bilibili",
+      "priority": 95,
+      "enabled": true,
+      "description": "B站视频检测规则",
+      "extractors": {
+        "bvid": [
+          "bilibili\\.com/video/(BV[\\w]{10})",
+          "b23\\.tv/([\\w]+)"
+        ],
+        "aid": [
+          "bilibili\\.com/video/av(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "twitter",
+      "patterns": [
+        "^https://(?:twitter\\.com|x\\.com)/[\\w_]+/status/\\d+",
+        "^https://(?:twitter\\.com|x\\.com)/[\\w_]+",
+        "^https://(?:twitter\\.com|x\\.com)/i/events/\\d+"
+      ],
+      "contentType": "tweet",
+      "metadataExtractor": "twitter",
+      "priority": 90,
+      "enabled": true,
+      "description": "Twitter/X推文检测规则",
+      "extractors": {
+        "tweetId": [
+          "(?:twitter\\.com|x\\.com)/[\\w_]+/status/(\\d+)"
+        ],
+        "username": [
+          "(?:twitter\\.com|x\\.com)/([\\w_]+)"
+        ]
+      }
+    },
+    {
+      "platform": "medium",
+      "patterns": [
+        "^https://medium\\.com/@[\\w.-]+/[\\w-]+",
+        "^https://[\\w-]+\\.medium\\.com/[\\w-]+"
+      ],
+      "contentType": "article",
+      "metadataExtractor": "medium",
+      "priority": 85,
+      "enabled": true,
+      "description": "Medium文章检测规则",
+      "extractors": {
+        "articleId": [
+          "medium\\.com/@[\\w.-]+/([\\w-]+)",
+          "[\\w-]+\\.medium\\.com/([\\w-]+)"
+        ]
+      }
+    },
+    {
+      "platform": "zhihu",
+      "patterns": [
+        "^https://www\\.zhihu\\.com/question/\\d+",
+        "^https://zhuanlan\\.zhihu\\.com/p/\\d+",
+        "^https://www\\.zhihu\\.com/answer/\\d+",
+        "^https://www\\.zhihu\\.com/zvideo/\\d+",
+        "^https://www\\.zhihu\\.com/people/[\\w-]+"
+      ],
+      "contentType": "article",
+      "metadataExtractor": "zhihu",
+      "priority": 80,
+      "enabled": true,
+      "description": "知乎内容检测规则",
+      "extractors": {
+        "questionId": [
+          "zhihu\\.com/question/(\\d+)"
+        ],
+        "articleId": [
+          "zhuanlan\\.zhihu\\.com/p/(\\d+)"
+        ],
+        "answerId": [
+          "zhihu\\.com/answer/(\\d+)"
+        ],
+        "videoId": [
+          "zhihu\\.com/zvideo/(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "github",
+      "patterns": [
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+",
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+/issues/\\d+",
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+/pull/\\d+",
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+/blob/",
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+/tree/",
+        "^https://github\\.com/[\\w.-]+/[\\w.-]+/wiki"
+      ],
+      "contentType": "code_repository",
+      "metadataExtractor": "github",
+      "priority": 75,
+      "enabled": true,
+      "description": "GitHub仓库检测规则",
+      "extractors": {
+        "repo": [
+          "github\\.com/([\\w.-]+)/([\\w.-]+)"
+        ],
+        "issueId": [
+          "github\\.com/[\\w.-]+/[\\w.-]+/issues/(\\d+)"
+        ],
+        "prId": [
+          "github\\.com/[\\w.-]+/[\\w.-]+/pull/(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "weibo",
+      "patterns": [
+        "^https://weibo\\.com/\\d+/[A-Za-z0-9]+",
+        "^https://m\\.weibo\\.cn/status/\\d+",
+        "^https://weibo\\.com/u/\\d+",
+        "^https://weibo\\.com/[\\w-]+"
+      ],
+      "contentType": "tweet",
+      "metadataExtractor": "weibo",
+      "priority": 70,
+      "enabled": true,
+      "description": "微博内容检测规则",
+      "extractors": {
+        "weiboId": [
+          "weibo\\.com/\\d+/([A-Za-z0-9]+)",
+          "m\\.weibo\\.cn/status/(\\d+)"
+        ],
+        "userId": [
+          "weibo\\.com/u/(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "tiktok",
+      "patterns": [
+        "^https://www\\.tiktok\\.com/@[\\w.-]+/video/\\d+",
+        "^https://vt\\.tiktok\\.com/[A-Za-z0-9]+",
+        "^https://www\\.tiktok\\.com/@[\\w.-]+"
+      ],
+      "contentType": "video",
+      "metadataExtractor": "tiktok",
+      "priority": 65,
+      "enabled": true,
+      "description": "TikTok视频检测规则",
+      "extractors": {
+        "videoId": [
+          "tiktok\\.com/@[\\w.-]+/video/(\\d+)"
+        ],
+        "shortId": [
+          "vt\\.tiktok\\.com/([A-Za-z0-9]+)"
+        ]
+      }
+    },
+    {
+      "platform": "reddit",
+      "patterns": [
+        "^https://www\\.reddit\\.com/r/[\\w]+/comments/[\\w]+",
+        "^https://old\\.reddit\\.com/r/[\\w]+/comments/[\\w]+",
+        "^https://www\\.reddit\\.com/r/[\\w]+"
+      ],
+      "contentType": "discussion",
+      "metadataExtractor": "reddit",
+      "priority": 60,
+      "enabled": true,
+      "description": "Reddit讨论检测规则",
+      "extractors": {
+        "postId": [
+          "reddit\\.com/r/[\\w]+/comments/([\\w]+)"
+        ],
+        "subreddit": [
+          "reddit\\.com/r/([\\w]+)"
+        ]
+      }
+    },
+    {
+      "platform": "stackoverflow",
+      "patterns": [
+        "^https://stackoverflow\\.com/questions/\\d+/",
+        "^https://stackoverflow\\.com/a/\\d+",
+        "^https://stackoverflow\\.com/q/\\d+"
+      ],
+      "contentType": "discussion",
+      "metadataExtractor": "stackoverflow",
+      "priority": 55,
+      "enabled": true,
+      "description": "Stack Overflow问答检测规则",
+      "extractors": {
+        "questionId": [
+          "stackoverflow\\.com/questions/(\\d+)",
+          "stackoverflow\\.com/q/(\\d+)"
+        ],
+        "answerId": [
+          "stackoverflow\\.com/a/(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "devto",
+      "patterns": [
+        "^https://dev\\.to/[\\w.-]+/[\\w-]+",
+        "^https://dev\\.to/[\\w.-]+"
+      ],
+      "contentType": "article",
+      "metadataExtractor": "devto",
+      "priority": 50,
+      "enabled": true,
+      "description": "dev.to文章检测规则",
+      "extractors": {
+        "articleId": [
+          "dev\\.to/[\\w.-]+/([\\w-]+)"
+        ],
+        "username": [
+          "dev\\.to/([\\w.-]+)"
+        ]
+      }
+    },
+    {
+      "platform": "hackernews",
+      "patterns": [
+        "^https://news\\.ycombinator\\.com/item\\?id=\\d+",
+        "^https://news\\.ycombinator\\.com"
+      ],
+      "contentType": "discussion",
+      "metadataExtractor": "hackernews",
+      "priority": 45,
+      "enabled": true,
+      "description": "Hacker News讨论检测规则",
+      "extractors": {
+        "itemId": [
+          "news\\.ycombinator\\.com/item\\?id=(\\d+)"
+        ]
+      }
+    },
+    {
+      "platform": "generic",
+      "patterns": [
+        "^https?://[^/]+/blog/[^/]+",
+        "^https?://[^/]+/article/[^/]+",
+        "^https?://[^/]+/post/[^/]+",
+        "^https?://[^/]+/news/[^/]+",
+        "^https?://[^/]+/docs/[^/]+",
+        "^https?://[^/]+/guide/[^/]+",
+        "^https?://[^/]+/tutorial/[^/]+"
+      ],
+      "contentType": "article",
+      "priority": 10,
+      "enabled": true,
+      "description": "通用博客/文章检测规则",
+      "extractors": {}
+    }
+  ],
+  "settings": {
+    "cacheDuration": 300000,
+    "maxCacheSize": 1000,
+    "enableDynamicLoading": false,
+    "defaultContentType": "generic",
+    "fallbackPlatform": "generic",
+    "confidenceThreshold": 0.6
+  }
+}
